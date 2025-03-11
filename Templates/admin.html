@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Side</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        a {
+            display: block;
+            text-align: center;
+            color: #007BFF;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Velkommen, {{ session['brukernavn'] }}! Du er administrator.</h2>
+        <h3>Administrer Brukere</h3>
+        <form method="POST" action="/add_user">
+            <input type="text" name="brukernavn" placeholder="Brukernavn" required>
+            <input type="password" name="passord" placeholder="Passord" required>
+            <select name="rolle" required>
+                <option value="bruker">Bruker</option>
+                <option value="admin">Admin</option>
+            </select>
+            <input type="submit" value="Legg til bruker">
+        </form>
+        <h3>Eksisterende brukere</h3>
+        <ul>
+            {% for user in brukere %}
+                <li>{{ user.brukernavn }} ({{ user.rolle }})
+                    <form method="POST" action="/delete_user" style="display:inline;">
+                        <input type="hidden" name="brukernavn" value="{{ user.brukernavn }}">
+                        <input type="submit" value="Slett">
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+        <h3>Legg til nyhet</h3>
+        <form method="POST" action="/add_news">
+            <input type="text" name="overskrift" placeholder="Overskrift" required>
+            <input type="text" name="ingress" placeholder="Ingress" required>
+            <textarea name="artikkel" placeholder="Artikkel"></textarea>
+            <input type="submit" value="Legg til nyhet">
+        </form>
+        <a href="/logout">Logg ut</a>
+    </div>
+</body>
+</html>
